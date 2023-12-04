@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FlatList } from 'react-native';
-import { View } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import { Text, Card } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from 'react-native-paper';
 import HighlightText from '../components/HighlightText';
 
@@ -30,7 +29,8 @@ const SearchResultScreen = ({ navigation, route }) => {
   const loadData = () => {
     setLoading(true);
     let apiUrl = `${apiHost}/search/bible_krv?query=${query}`;
-    fetch(apiUrl)
+    console.log('hi');
+    etch(apiUrl)
       .then(res => res.json())
       .catch(err => {
         console.error(err);
