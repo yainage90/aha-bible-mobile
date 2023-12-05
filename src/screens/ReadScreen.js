@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useRef } from 'react';
 import { FlatList } from 'react-native';
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Card } from 'react-native-paper';
 import PaginationButton from '../components/PaginationButton';
 import { useTheme } from 'react-native-paper';
@@ -15,8 +14,6 @@ const ReadScreen = () => {
     read: { chapterIdx, title, chapter, verses },
     dispatch,
   } = useContext(ReadContext);
-
-  const apiHost = process.env.EXPO_PUBLIC_API_HOST;
 
   const setPage = (chapterIdx, title, chapter, verses) => {
     dispatch({
@@ -38,7 +35,7 @@ const ReadScreen = () => {
   }, [chapterIdx]);
 
   return (
-    <SafeAreaView>
+    <View>
       <FlatList
         ref={flatListRef}
         data={verses}
@@ -84,7 +81,7 @@ const ReadScreen = () => {
           console.log(`Go to chapterIdx=${chapterIdx + 1}`);
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

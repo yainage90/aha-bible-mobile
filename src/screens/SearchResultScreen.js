@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FlatList } from 'react-native';
-import { View, SafeAreaView } from 'react-native';
+import { View } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { useTheme } from 'react-native-paper';
 import HighlightText from '../components/HighlightText';
@@ -51,7 +51,7 @@ const SearchResultScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView
+    <View
       style={{
         paddingVertical: 20,
       }}
@@ -87,7 +87,7 @@ const SearchResultScreen = ({ navigation, route }) => {
           />
         }
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
