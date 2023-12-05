@@ -30,7 +30,7 @@ const SearchResultScreen = ({ navigation, route }) => {
     setLoading(true);
     let apiUrl = `${apiHost}/search/bible_krv?query=${query}`;
     console.log('hi');
-    etch(apiUrl)
+    fetch(apiUrl)
       .then(res => res.json())
       .catch(err => {
         console.error(err);

@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useRef } from 'react';
 import { FlatList } from 'react-native';
-import { View, SafeAreaView } from 'react-native';
+import { View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Card } from 'react-native-paper';
 import PaginationButton from '../components/PaginationButton';
 import { useTheme } from 'react-native-paper';
