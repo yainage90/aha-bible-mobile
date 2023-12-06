@@ -32,6 +32,9 @@ const SearchResultScreen = ({ navigation, route }) => {
     console.log(`Search request: ${apiUrl}`);
     fetch(apiUrl, {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
       .then(res => res.json())
       .catch(err => {
