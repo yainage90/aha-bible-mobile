@@ -29,8 +29,10 @@ const SearchResultScreen = ({ navigation, route }) => {
   const loadData = () => {
     setLoading(true);
     let apiUrl = `${apiHost}/search/bible_krv?query=${query}`;
-    console.log('hi');
-    fetch(apiUrl)
+    console.log(`Search request: ${apiUrl}`);
+    fetch(apiUrl, {
+      method: 'GET',
+    })
       .then(res => res.json())
       .catch(err => {
         console.error(err);
