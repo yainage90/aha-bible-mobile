@@ -1,11 +1,13 @@
 import { Asset } from 'expo-asset';
-import { readAsStringAsync } from 'expo-file-system';
+
+import * as FileSystem from 'expo-file-system';
 
 const read_bible_krv_file = async () => {
   const [{ localUri }] = await Asset.loadAsync(
     require('../../assets/bible/krv.txt'),
   );
-  const bibleKrvContent = await readAsStringAsync(localUri);
+  console.log(localUri);
+  const bibleKrvContent = await FileSystem.readAsStringAsync(localUri);
   const lines = bibleKrvContent.split('\n');
   const list = [];
   lines.forEach(line => {

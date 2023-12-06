@@ -10,28 +10,21 @@ import {
 } from 'react-native-paper';
 import Navigation from './navigations';
 import 'react-native-gesture-handler';
-import {
-  TapGestureHandler,
-  RotationGestureHandler,
-} from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-export default App = () => {
+export default function App() {
   useEffect(() => {
     init_bible_krv();
   }, []);
   return (
-    <TapGestureHandler>
-      <RotationGestureHandler>
-        <PaperProvider theme={DefaultTheme}>
-          <ReadProvider>
-            <SearchProvider>
-              <Navigation />
-            </SearchProvider>
-          </ReadProvider>
-        </PaperProvider>
-      </RotationGestureHandler>
-    </TapGestureHandler>
+    <PaperProvider theme={DefaultTheme}>
+      <ReadProvider>
+        <SearchProvider>
+          <Navigation />
+        </SearchProvider>
+      </ReadProvider>
+    </PaperProvider>
   );
-};
+}
 
 AppRegistry.registerComponent(appName, () => App);
