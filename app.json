@@ -31,6 +31,19 @@
         "projectId": "0db55649-0ff8-43b2-b4dc-2d351d744ac6"
       }
     },
-    "owner": "kimdoohan"
+    "owner": "kimdoohan",
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          },
+          "ios": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
   }
 }
