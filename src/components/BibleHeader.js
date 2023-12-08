@@ -1,20 +1,16 @@
-import React, { useContext } from 'react';
-import { Appbar, Menu } from 'react-native-paper';
+import React, { useState, useContext, useEffect } from 'react';
+import { Appbar } from 'react-native-paper';
 import { ReadContext } from '../contexts';
+import { setHeaderTitleByChapterIdx } from '../utils/db';
 
-const BibleHeader = ({ navigation, route, options }) => {
-  const {
-    read: { title, chapter },
-  } = useContext(ReadContext);
+const BibleHeader = ({ navigation }) => {
+  const { chapterIdx } = useContext(ReadContext);
 
-  let headerTitle = null;
-  if (route.name === 'Bible') {
-    headerTitle = `${title} ${chapter}장`;
-  } else if (route.name === 'Search') {
-    headerTitle = '검색';
-  } else if (route.name === 'SearchResult') {
-    headerTitle = `${route.query} 검색결과`;
-  }
+  const [headerTitle, setHeaderTitle] = useState('');
+
+  useEffect(() => {
+    setHeaderTitleByChapterIdx({ chapterIdx, setHeaderTitle });
+  }, [chapterIdx]);
 
   return (
     <Appbar.Header
@@ -23,8 +19,13 @@ const BibleHeader = ({ navigation, route, options }) => {
         justifyContent: 'space-around',
       }}
     >
-      <Appbar.Content title={headerTitle} style={{}} />
-      <Appbar.Action icon="view-list-outline" />
+      <Appbar.Content title={headerTitle} />
+      <Appbar.Action
+        icon="view-list-outline"
+        onPress={() => {
+          navigation.navigate('BibleList');
+        }}
+      />
       <Appbar.Action
         icon="magnify"
         onPress={() => {

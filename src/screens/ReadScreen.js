@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef } from 'react';
+import React, { useEffect, useContext, useRef, useState } from 'react';
 import { FlatList } from 'react-native';
 import { View } from 'react-native';
 import { Text, Card } from 'react-native-paper';
@@ -7,32 +7,38 @@ import { useTheme } from 'react-native-paper';
 import { readBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
 
-const ReadScreen = () => {
+const ReadScreen = ({ route }) => {
   const theme = useTheme();
   const flatListRef = useRef();
-  const {
-    read: { chapterIdx, title, chapter, verses },
-    dispatch,
-  } = useContext(ReadContext);
+  const { chapterIdx, dispatch } = useContext(ReadContext);
 
-  const setPage = (chapterIdx, title, chapter, verses) => {
-    dispatch({
-      chapterIdx,
-      title,
-      chapter,
-      verses,
-    });
-    if (flatListRef.current) {
+  const [verses, setVerses] = useState([]);
+
+  useEffect(() => {
+    readBibleKrvByChapterIdx(chapterIdx, setVerses);
+    if (flatListRef.current && verses.length > 0) {
       flatListRef.current.scrollToIndex({
         index: 0,
         animated: false,
       });
     }
+  }, [chapterIdx]);
+
+  const handlePrevPress = () => {
+    readBibleKrvByChapterIdx(chapterIdx - 1, setVerses);
+    dispatch({
+      chapterIdx: chapterIdx - 1,
+    });
+    console.log(`Go to chapterIdx=${chapterIdx - 1}`);
   };
 
-  useEffect(() => {
-    readBibleKrvByChapterIdx(chapterIdx, setPage);
-  }, [chapterIdx]);
+  const handleNextPress = () => {
+    readBibleKrvByChapterIdx(chapterIdx + 1, setVerses);
+    dispatch({
+      chapterIdx: chapterIdx + 1,
+    });
+    console.log(`Go to chapterIdx=${chapterIdx + 1}`);
+  };
 
   return (
     <View>
@@ -71,15 +77,9 @@ const ReadScreen = () => {
       />
       <PaginationButton
         prevVisible={chapterIdx > 0}
-        onPrevPress={() => {
-          readBibleKrvByChapterIdx(chapterIdx - 1, setPage);
-          console.log(`go to chapterIdx=${chapterIdx - 1}`);
-        }}
+        onPrevPress={handlePrevPress}
         nextVisible={chapterIdx < 1188}
-        onNextPress={() => {
-          readBibleKrvByChapterIdx(chapterIdx + 1, setPage);
-          console.log(`Go to chapterIdx=${chapterIdx + 1}`);
-        }}
+        onNextPress={handleNextPress}
       />
     </View>
   );

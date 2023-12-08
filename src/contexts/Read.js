@@ -1,18 +1,16 @@
 import React, { useState, createContext } from 'react';
 
 const ReadContext = createContext({
-  read: { chapterIdx: 0, title: null, chapter: null, verses: [] },
+  chapterIdx: 0,
   dispatch: () => {},
 });
 
 const ReadProvider = ({ children }) => {
-  const [read, setRead] = useState({
-    chapterIdx: 0,
-  });
-  const dispatch = ({ chapterIdx, title, chapter, verses }) => {
-    setRead({ chapterIdx, title, chapter, verses });
+  const [chapterIdx, setChapterIdx] = useState(0);
+  const dispatch = ({ chapterIdx }) => {
+    setChapterIdx(chapterIdx);
   };
-  const value = { read, dispatch };
+  const value = { chapterIdx, dispatch };
   return <ReadContext.Provider value={value}>{children}</ReadContext.Provider>;
 };
 
