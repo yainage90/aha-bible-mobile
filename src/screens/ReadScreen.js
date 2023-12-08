@@ -6,6 +6,7 @@ import PaginationButton from '../components/PaginationButton';
 import { useTheme } from 'react-native-paper';
 import { readBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
+import VerseCard from '../components/VerseCard';
 
 const ReadScreen = ({ route }) => {
   const theme = useTheme();
@@ -17,8 +18,13 @@ const ReadScreen = ({ route }) => {
   useEffect(() => {
     readBibleKrvByChapterIdx(chapterIdx, setVerses);
     if (flatListRef.current && verses.length > 0) {
+      let index = 0;
+      if (route.params && route.params.verse) {
+        index = route.params.verse - 1;
+      }
+
       flatListRef.current.scrollToIndex({
-        index: 0,
+        index,
         animated: false,
       });
     }
@@ -46,25 +52,7 @@ const ReadScreen = ({ route }) => {
         ref={flatListRef}
         data={verses}
         renderItem={({ item: { idx, title, chapter, verse, text } }) => (
-          <Card
-            style={{
-              margin: 3,
-              backgroundColor: theme.colors.onPrimary,
-            }}
-          >
-            <Card.Content style={cardContentrStyle}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}
-              >
-                <Text variant="titleMedium" style={titleStyle}>
-                  {verse}
-                </Text>
-                <Text variant="bodyLarge">{text}</Text>
-              </View>
-            </Card.Content>
-          </Card>
+          <VerseCard title={verse} content={text} />
         )}
         keyExtractor={item => item.idx}
         ListFooterComponent={

@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { FlatList } from 'react-native';
 import { View } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { useTheme } from 'react-native-paper';
 import HighlightText from '../components/HighlightText';
+import { ReadContext } from '../contexts';
+import VerseCard from '../components/VerseCard';
 
 const SearchResultScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
@@ -13,6 +15,8 @@ const SearchResultScreen = ({ navigation, route }) => {
   const flatListRef = useRef();
 
   const { query } = route.params;
+
+  const { dispatch } = useContext(ReadContext);
 
   const apiHost = process.env.EXPO_PUBLIC_API_HOST;
 
@@ -64,23 +68,20 @@ const SearchResultScreen = ({ navigation, route }) => {
       <FlatList
         ref={flatListRef}
         data={verses}
-        renderItem={({ item: { book, title, chapter, verse, highlight } }) => (
+        renderItem={({
+          item: { book, title, chapter, chapter_idx, verse, highlight },
+        }) => (
           <>
             <Text variant="titleMedium" style={titleStyle}>
               {book} {title} {chapter}장 {verse}절
             </Text>
-            <Card
-              style={{
-                margin: 3,
-                backgroundColor: theme.colors.onPrimary,
+            <VerseCard
+              content={<HighlightText>{highlight}</HighlightText>}
+              onPress={() => {
+                dispatch({ chapterIdx: chapter_idx });
+                navigation.navigate('Read', { verse });
               }}
-            >
-              <Card.Content style={cardContentrStyle}>
-                <Text variant="bodyLarge" style={titleStyle}>
-                  <HighlightText>{highlight}</HighlightText>
-                </Text>
-              </Card.Content>
-            </Card>
+            />
           </>
         )}
         keyExtractor={item => item.idx}
