@@ -21,9 +21,6 @@ export default function App() {
     'NanumGothic-Bold': require('../assets/fonts/NanumGothic-Bold.ttf'),
     'NanumGothic-ExtraBold': require('../assets/fonts/NanumGothic-ExtraBold.ttf'),
     'NanumGothic-Regular': require('../assets/fonts/NanumGothic-Regular.ttf'),
-    'NanumMyeongjo-Bold': require('../assets/fonts/NanumMyeongjo-Bold.ttf'),
-    'NanumMyeongjo-ExtraBold': require('../assets/fonts/NanumMyeongjo-ExtraBold.ttf'),
-    'NanumMyeongjo-Regular': require('../assets/fonts/NanumMyeongjo-Regular.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
