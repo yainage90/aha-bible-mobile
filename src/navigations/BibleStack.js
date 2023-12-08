@@ -36,7 +36,13 @@ const BibleStack = ({ navigation, route }) => {
           header: () => <BibleHeader navigation={navigation} route={route} />,
         }}
       />
-      <Stack.Screen name="BibleList" component={BibleListScreen} />
+      <Stack.Screen
+        name="BibleList"
+        component={BibleListScreen}
+        options={{
+          headerTitle: '목차',
+        }}
+      />
       <Stack.Screen
         name="Search"
         component={SearchScreen}

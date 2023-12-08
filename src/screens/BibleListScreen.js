@@ -1,24 +1,26 @@
 import { FlatList, View, useWindowDimensions } from 'react-native';
 import React, { useState, useContext, useEffect } from 'react';
-import { TabView, SceneMap } from 'react-native-tab-view';
-import { Text } from 'react-native-paper';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { loadTitleList, loadChapterList } from '../utils/db';
 import { List, MD3Colors } from 'react-native-paper';
 import { ReadContext } from '../contexts';
+import { useTheme } from 'react-native-paper';
 
 const BibleListScreen = ({ navigation }) => {
   const layout = useWindowDimensions();
 
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: 'title', title: 'Title' },
-    { key: 'chapter', title: 'Chapter' },
-  ]);
-
   const [titles, setTitles] = useState([]);
   const [chapters, setChapters] = useState([]);
 
+  const theme = useTheme();
+
   const { dispatch } = useContext(ReadContext);
+
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'title', title: '제목' },
+    { key: 'chapter', title: '장' },
+  ]);
 
   useEffect(() => {
     loadTitleList(setTitles);
@@ -87,6 +89,21 @@ const BibleListScreen = ({ navigation }) => {
         chapter: () => ChapterRoute(chapters),
       })}
       onIndexChange={setIndex}
+      renderTabBar={props => (
+        <TabBar
+          {...props}
+          indicatorStyle={{
+            backgroundColor: theme.colors.outline,
+          }}
+          labelStyle={{
+            fontSize: 18,
+            color: theme.colors.onSurfaceVariant,
+          }}
+          style={{
+            backgroundColor: theme.colors.surfaceVariant,
+          }}
+        />
+      )}
       initialLayout={{ width: layout.width }}
     />
   );
