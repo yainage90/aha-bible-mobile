@@ -60,20 +60,16 @@ const SearchResultScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View
-      style={{
-        paddingVertical: 20,
-      }}
-    >
+    <View style={{ paddingVertical: 20 }}>
       <FlatList
         ref={flatListRef}
         data={verses}
         renderItem={({
           item: { book, title, chapter, chapter_idx, verse, highlight },
         }) => (
-          <>
-            <Text variant="titleMedium" style={titleStyle}>
-              {book} {title} {chapter}장 {verse}절
+          <View>
+            <Text style={titleStyle}>
+              • {book} {title} {chapter}장 {verse}절
             </Text>
             <VerseCard
               content={<HighlightText>{highlight}</HighlightText>}
@@ -82,7 +78,7 @@ const SearchResultScreen = ({ navigation, route }) => {
                 navigation.navigate('Read', { verse });
               }}
             />
-          </>
+          </View>
         )}
         keyExtractor={item => item.idx}
         ListFooterComponent={
@@ -97,12 +93,11 @@ const SearchResultScreen = ({ navigation, route }) => {
   );
 };
 
-const cardContentrStyle = {
-  marginRight: 10,
-};
-
 const titleStyle = {
-  marginRight: 10,
+  marginTop: 12,
+  marginBottom: 3,
+  fontFamily: 'NanumGothic-Bold',
+  fontSize: 16,
 };
 
 export default SearchResultScreen;

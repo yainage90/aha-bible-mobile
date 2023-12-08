@@ -41,6 +41,10 @@ const BibleStack = ({ navigation, route }) => {
         component={BibleListScreen}
         options={{
           headerTitle: '목차',
+          headerTitleStyle: {
+            fontSize: 22,
+            fontFamily: 'NanumGothic-ExtraBold',
+          },
         }}
       />
       <Stack.Screen
@@ -48,6 +52,10 @@ const BibleStack = ({ navigation, route }) => {
         component={SearchScreen}
         options={{
           headerTitle: '검색',
+          headerTitleStyle: {
+            fontSize: 22,
+            fontFamily: 'NanumGothic-ExtraBold',
+          },
         }}
       />
       <Stack.Screen
@@ -55,6 +63,10 @@ const BibleStack = ({ navigation, route }) => {
         component={SearchResultScreen}
         options={{
           headerTitle: `'${query}' 검색결과`,
+          headerTitleStyle: {
+            fontSize: 22,
+            fontFamily: 'NanumGothic-ExtraBold',
+          },
         }}
       />
     </Stack.Navigator>

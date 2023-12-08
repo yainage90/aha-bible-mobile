@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native-paper';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { HomeScreen, BibleScreen } from '../screens';
@@ -19,6 +20,7 @@ export default MainTab = () => {
               size={26}
             />
           ),
+          tabBarLabel: '홈',
         }}
       />
       <Tab.Screen
@@ -35,6 +37,7 @@ export default MainTab = () => {
               size={26}
             />
           ),
+          tabBarLabel: '성경',
         }}
       />
     </Tab.Navigator>

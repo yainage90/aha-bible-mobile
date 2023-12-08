@@ -10,13 +10,25 @@ const HighlightText = ({ children }) => {
       return (
         <Text
           key={idx}
-          style={{ fontWeight: 'bold', color: theme.colors.error }}
+          style={{
+            fontFamily: 'NanumGothic-Bold',
+            color: theme.colors.error,
+          }}
         >
           {val}
         </Text>
       );
     } else {
-      return val;
+      return (
+        <Text
+          key={idx}
+          style={{
+            fontFamily: 'NanumGothic-Regular',
+          }}
+        >
+          {val}
+        </Text>
+      );
     }
   });
   return str_or_components;

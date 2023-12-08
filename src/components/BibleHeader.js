@@ -21,7 +21,12 @@ const BibleHeader = ({ navigation }) => {
         justifyContent: 'space-around',
       }}
     >
-      <Appbar.Content title={headerTitle} />
+      <Appbar.Content
+        title={headerTitle}
+        titleStyle={{
+          fontFamily: 'NanumGothic-Bold',
+        }}
+      />
       <Appbar.Action
         icon="view-list-outline"
         onPress={() => {

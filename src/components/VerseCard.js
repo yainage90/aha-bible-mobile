@@ -8,12 +8,13 @@ const VerseCard = ({ onPress, title, content }) => {
   return (
     <Card
       style={{
-        ...cardStyle,
         backgroundColor: theme.colors.onPrimary,
+        marginHorizontal: 6,
+        marginVertical: 2,
       }}
       onPress={onPress}
     >
-      <Card.Content style={cardContentrStyle}>
+      <Card.Content>
         <View
           style={{
             flexDirection: 'row',
@@ -24,26 +25,24 @@ const VerseCard = ({ onPress, title, content }) => {
               {title}
             </Text>
           )}
-          <Text variant="bodyLarge">{content}</Text>
+          <Text variant="bodyLarge" style={contentTextStyle}>
+            {content}
+          </Text>
         </View>
       </Card.Content>
     </Card>
   );
 };
 
-const cardStyle = {
-  marginHorizontal: 5,
-  marginVertical: 2,
-};
-
-const cardContentrStyle = {
-  marginRight: 20,
-};
-
 const titleStyle = {
-  marginRight: 10,
+  marginRight: 4,
   fontSize: 12,
-  fontWeight: '200',
+  fontFamily: 'NanumGothic-Bold',
+};
+
+const contentTextStyle = {
+  fontFamily: 'NanumGothic-Regular',
+  fontSize: 16,
 };
 
 export default VerseCard;

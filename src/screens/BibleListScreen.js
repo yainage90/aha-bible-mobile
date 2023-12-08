@@ -42,7 +42,8 @@ const BibleListScreen = ({ navigation }) => {
                   marginVertical: 10,
                 }}
                 titleStyle={{
-                  fontSize: 24,
+                  fontSize: 20,
+                  fontFamily: 'NanumGothic-Regular',
                 }}
                 onPress={() => {
                   loadChapterList(title).then(chapters => {
@@ -71,7 +72,8 @@ const BibleListScreen = ({ navigation }) => {
                 marginVertical: 10,
               }}
               titleStyle={{
-                fontSize: 24,
+                fontSize: 20,
+                fontFamily: 'NanumGothic-Regular',
               }}
               onPress={() => {
                 dispatch({ chapterIdx });
@@ -101,6 +103,7 @@ const BibleListScreen = ({ navigation }) => {
           }}
           labelStyle={{
             fontSize: 18,
+            fontFamily: 'NanumGothic-ExtraBold',
             color: theme.colors.onSurfaceVariant,
           }}
           style={{
