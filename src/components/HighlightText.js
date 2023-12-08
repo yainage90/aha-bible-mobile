@@ -22,8 +22,4 @@ const HighlightText = ({ children }) => {
   return str_or_components;
 };
 
-const style = StyleSheet.create({
-  fontWeight: 'bold',
-});
-
 export default HighlightText;

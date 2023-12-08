@@ -8,6 +8,7 @@ const VerseCard = ({ onPress, title, content }) => {
   return (
     <Card
       style={{
+        ...cardStyle,
         backgroundColor: theme.colors.onPrimary,
       }}
       onPress={onPress}
@@ -30,12 +31,19 @@ const VerseCard = ({ onPress, title, content }) => {
   );
 };
 
+const cardStyle = {
+  marginHorizontal: 5,
+  marginVertical: 2,
+};
+
 const cardContentrStyle = {
-  marginRight: 10,
+  marginRight: 20,
 };
 
 const titleStyle = {
   marginRight: 10,
+  fontSize: 12,
+  fontWeight: '200',
 };
 
 export default VerseCard;
