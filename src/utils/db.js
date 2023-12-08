@@ -127,85 +127,104 @@ const readBibleKrvByChapterIdx = (chapterIdx, setVerses) => {
   );
 };
 
-const loadTitleList = setTitles => {
-  db.transaction(
-    tx => {
-      tx.executeSql(
-        `SELECT distinct title FROM ${TABLE_KRV}`,
-        [],
-        (_, result) => {
-          const titles = result.rows._array.map((val, idx) => {
-            return { title: val.title, idx: idx };
-          });
-          setTitles(titles);
-        },
-        err => {
-          console.log(err);
-        },
-      );
-    },
-    err => {
-      console.log(err);
-    },
-    () => {},
+const loadBibleKrvByChapterIdx = chapterIdx => {
+  return new Promise((resolve, reject) =>
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          `SELECT * FROM ${TABLE_KRV} WHERE chapter_idx=${chapterIdx};`,
+          [],
+          (_, result) => resolve(result.rows._array),
+          reject,
+        );
+      },
+      err => {
+        console.error(err);
+      },
+      () => {},
+    ),
   );
 };
 
-const loadChapterList = (title, setChapters) => {
-  db.transaction(
-    tx => {
-      tx.executeSql(
-        `SELECT distinct chapter, chapter_idx FROM ${TABLE_KRV} WHERE title='${title}'`,
-        [],
-        (_, result) => {
-          const chapters = result.rows._array.map((val, idx) => {
-            return {
-              chapter: val.chapter,
-              chapterIdx: val.chapter_idx,
-              idx: idx,
-            };
-          });
-          setChapters(chapters);
-        },
-        err => {
-          console.error(err);
-        },
-      );
-    },
-    err => {
-      console.error(err);
-    },
-    () => {},
-  );
+const loadTitleList = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          `SELECT distinct title FROM ${TABLE_KRV}`,
+          [],
+          (_, result) =>
+            resolve(
+              result.rows._array.map((val, idx) => ({
+                title: val.title,
+                idx: idx,
+              })),
+            ),
+          reject,
+        );
+      },
+      err => {
+        console.error(err);
+      },
+      () => {},
+    );
+  });
 };
 
-const setHeaderTitleByChapterIdx = ({ chapterIdx, setHeaderTitle }) => {
-  db.transaction(
-    tx => {
-      tx.executeSql(
-        `SELECT title, chapter FROM ${TABLE_KRV} WHERE chapter_idx=${chapterIdx} LIMIT 1;`,
-        [],
-        (_, result) => {
-          const record = result.rows._array[0];
-          const headerTitle = `${record.title} ${record.chapter}장`;
-          setHeaderTitle(headerTitle);
-        },
-        err => {
-          console.error(err);
-        },
-      );
-    },
-    err => {
-      console.error(err);
-    },
-    () => {},
-  );
+const loadChapterList = title => {
+  return new Promise((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          `SELECT distinct chapter, chapter_idx FROM ${TABLE_KRV} WHERE title='${title}'`,
+          [],
+          (_, result) =>
+            resolve(
+              result.rows._array.map((val, idx) => ({
+                chapter: val.chapter,
+                chapterIdx: val.chapter_idx,
+                idx: idx,
+              })),
+            ),
+          reject,
+        );
+      },
+      err => {
+        console.error(err);
+      },
+      () => {},
+    );
+  });
+};
+
+const getHeaderTitleByChapterIdx = chapterIdx => {
+  return new Promise((resolve, reject) => {
+    db.transaction(
+      tx => {
+        tx.executeSql(
+          `SELECT title, chapter FROM ${TABLE_KRV} WHERE chapter_idx=${chapterIdx} LIMIT 1;`,
+          [],
+          (_, result) => {
+            const record = result.rows._array[0];
+            const headerTitle = `${record.title} ${record.chapter}장`;
+            resolve(headerTitle);
+          },
+          reject,
+        );
+      },
+      err => {
+        console.error(err);
+      },
+      () => {},
+    );
+  });
 };
 
 export {
   init_bible_krv,
   readBibleKrvByChapterIdx,
+  loadBibleKrvByChapterIdx,
   loadTitleList,
   loadChapterList,
-  setHeaderTitleByChapterIdx,
+  getHeaderTitleByChapterIdx,
 };

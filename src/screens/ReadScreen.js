@@ -1,22 +1,28 @@
-import React, { useEffect, useContext, useRef, useState } from 'react';
-import { FlatList } from 'react-native';
-import { View } from 'react-native';
-import { Text, Card } from 'react-native-paper';
+import React, {
+  useEffect,
+  useContext,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
+import { FlashList } from '@shopify/flash-list';
+import { View, useWindowDimensions } from 'react-native';
 import PaginationButton from '../components/PaginationButton';
 import { useTheme } from 'react-native-paper';
-import { readBibleKrvByChapterIdx } from '../utils/db';
+import { loadBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
 import VerseCard from '../components/VerseCard';
 
-const ReadScreen = ({ route }) => {
+const ReadScreen = ({ navigation, route }) => {
   const theme = useTheme();
   const flatListRef = useRef();
   const { chapterIdx, dispatch } = useContext(ReadContext);
 
   const [verses, setVerses] = useState([]);
 
-  useEffect(() => {
-    readBibleKrvByChapterIdx(chapterIdx, setVerses);
+  const layout = useWindowDimensions();
+
+  const scrollToIndex = () => {
     if (flatListRef.current && verses.length > 0) {
       let index = 0;
       if (route.params && route.params.verse) {
@@ -25,36 +31,47 @@ const ReadScreen = ({ route }) => {
 
       flatListRef.current.scrollToIndex({
         index,
-        animated: false,
+        animated: true,
       });
     }
+  };
+
+  useEffect(() => {
+    loadBibleKrvByChapterIdx(chapterIdx)
+      .then(verses => {
+        setVerses(verses);
+        scrollToIndex();
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }, [chapterIdx]);
 
   const handlePrevPress = () => {
-    readBibleKrvByChapterIdx(chapterIdx - 1, setVerses);
     dispatch({
       chapterIdx: chapterIdx - 1,
     });
+    navigation.navigate('Read', { chapterIdx: chapterIdx - 1 });
     console.log(`Go to chapterIdx=${chapterIdx - 1}`);
   };
 
   const handleNextPress = () => {
-    readBibleKrvByChapterIdx(chapterIdx + 1, setVerses);
     dispatch({
       chapterIdx: chapterIdx + 1,
     });
+    navigation.navigate('Read', { chapterIdx: chapterIdx + 1 });
     console.log(`Go to chapterIdx=${chapterIdx + 1}`);
   };
 
   return (
-    <View>
-      <FlatList
+    <View style={{ flex: 1, height: layout.height }}>
+      <FlashList
         ref={flatListRef}
         data={verses}
         renderItem={({ item: { idx, title, chapter, verse, text } }) => (
           <VerseCard title={verse} content={text} />
         )}
-        keyExtractor={item => item.idx}
+        estimatedItemSize={120}
         ListFooterComponent={
           <View
             style={{
@@ -64,6 +81,9 @@ const ReadScreen = ({ route }) => {
         }
       />
       <PaginationButton
+        style={{
+          flex: 1,
+        }}
         prevVisible={chapterIdx > 0}
         onPrevPress={handlePrevPress}
         nextVisible={chapterIdx < 1188}

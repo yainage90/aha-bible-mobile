@@ -23,7 +23,9 @@ const BibleListScreen = ({ navigation }) => {
   ]);
 
   useEffect(() => {
-    loadTitleList(setTitles);
+    loadTitleList().then(titles => {
+      setTitles(titles);
+    });
   }, []);
 
   const TitleRoute = () => {
@@ -43,7 +45,9 @@ const BibleListScreen = ({ navigation }) => {
                   fontSize: 24,
                 }}
                 onPress={() => {
-                  loadChapterList(title, setChapters);
+                  loadChapterList(title).then(chapters => {
+                    setChapters(chapters);
+                  });
                   setIndex(prev => prev + 1);
                 }}
               />
