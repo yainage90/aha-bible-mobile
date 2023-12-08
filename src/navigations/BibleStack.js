@@ -1,6 +1,11 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { ReadScreen, SearchScreen, SearchResultScreen } from '../screens';
+import {
+  ReadScreen,
+  SearchScreen,
+  SearchResultScreen,
+  BibleListScreen,
+} from '../screens';
 import BibleHeader from '../components/BibleHeader';
 import { useTheme } from 'react-native-paper';
 import { SearchContext } from '../contexts';
@@ -31,6 +36,7 @@ const BibleStack = ({ navigation, route }) => {
           header: () => <BibleHeader navigation={navigation} route={route} />,
         }}
       />
+      <Stack.Screen name="BibleList" component={BibleListScreen} />
       <Stack.Screen
         name="Search"
         component={SearchScreen}

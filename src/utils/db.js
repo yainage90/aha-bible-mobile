@@ -105,17 +105,15 @@ const insert_bible_krv = () => {
     });
 };
 
-const readBibleKrvByChapterIdx = (chapterIdx, setPage) => {
+const readBibleKrvByChapterIdx = (chapterIdx, setVerses) => {
   db.transaction(
     tx => {
       tx.executeSql(
         `SELECT * FROM ${TABLE_KRV} WHERE chapter_idx=${chapterIdx};`,
         [],
         (_, result) => {
-          const title = result.rows._array[0].title;
-          const chapter = result.rows._array[0].chapter;
           const verses = result.rows._array;
-          setPage(chapterIdx, title, chapter, verses);
+          setVerses(verses);
         },
         err => {
           console.log(err);
@@ -129,4 +127,85 @@ const readBibleKrvByChapterIdx = (chapterIdx, setPage) => {
   );
 };
 
-export { init_bible_krv, readBibleKrvByChapterIdx };
+const loadTitleList = setTitles => {
+  db.transaction(
+    tx => {
+      tx.executeSql(
+        `SELECT distinct title FROM ${TABLE_KRV}`,
+        [],
+        (_, result) => {
+          const titles = result.rows._array.map((val, idx) => {
+            return { title: val.title, idx: idx };
+          });
+          setTitles(titles);
+        },
+        err => {
+          console.log(err);
+        },
+      );
+    },
+    err => {
+      console.log(err);
+    },
+    () => {},
+  );
+};
+
+const loadChapterList = (title, setChapters) => {
+  db.transaction(
+    tx => {
+      tx.executeSql(
+        `SELECT distinct chapter, chapter_idx FROM ${TABLE_KRV} WHERE title='${title}'`,
+        [],
+        (_, result) => {
+          const chapters = result.rows._array.map((val, idx) => {
+            return {
+              chapter: val.chapter,
+              chapterIdx: val.chapter_idx,
+              idx: idx,
+            };
+          });
+          setChapters(chapters);
+        },
+        err => {
+          console.error(err);
+        },
+      );
+    },
+    err => {
+      console.error(err);
+    },
+    () => {},
+  );
+};
+
+const setHeaderTitleByChapterIdx = ({ chapterIdx, setHeaderTitle }) => {
+  db.transaction(
+    tx => {
+      tx.executeSql(
+        `SELECT title, chapter FROM ${TABLE_KRV} WHERE chapter_idx=${chapterIdx} LIMIT 1;`,
+        [],
+        (_, result) => {
+          const record = result.rows._array[0];
+          const headerTitle = `${record.title} ${record.chapter}장`;
+          setHeaderTitle(headerTitle);
+        },
+        err => {
+          console.error(err);
+        },
+      );
+    },
+    err => {
+      console.error(err);
+    },
+    () => {},
+  );
+};
+
+export {
+  init_bible_krv,
+  readBibleKrvByChapterIdx,
+  loadTitleList,
+  loadChapterList,
+  setHeaderTitleByChapterIdx,
+};
