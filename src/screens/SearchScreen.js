@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Searchbar } from 'react-native-paper';
-import { View } from 'react-native';
+import { View, useColorScheme } from 'react-native';
+import { SearchContext } from '../contexts';
 
 const SearchScreen = ({ navigation }) => {
   const [query, setQuery] = useState('');
 
+  const { dispatch } = useContext(SearchContext);
+
   const onSearch = () => {
+    dispatch({ query });
     navigation.navigate('SearchResult', { query });
   };
 

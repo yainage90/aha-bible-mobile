@@ -48,7 +48,7 @@ const BibleStack = ({ navigation, route }) => {
         name="SearchResult"
         component={SearchResultScreen}
         options={{
-          headerTitle: `${query} 검색결과`,
+          headerTitle: `'${query}' 검색결과`,
         }}
       />
     </Stack.Navigator>
