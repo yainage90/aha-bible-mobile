@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Panel from '../components/Panel';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
   ReadScreen,
@@ -20,28 +19,21 @@ const MainStack = () => {
   } = useContext(SearchContext);
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={containerStyle}>
-        <Stack.Navigator
-          initialRouteName="Read"
-          screenOptions={{
-            headerTintColor: MD3LightTheme.colors.background,
-            headerBackTitleVisible: false,
-            cardStyle: {
-              backgroundColor: MD3LightTheme.colors.background,
-            },
-          }}
-        >
-          <Stack.Screen name="Read" component={ReadScreen} />
-          <Stack.Screen name="BibleList" component={BibleListScreen} />
-          <Stack.Screen name="Search" component={SearchScreen} />
-          <Stack.Screen name="SearchResult" component={SearchResultScreen} />
-        </Stack.Navigator>
-      </View>
-      <View style={panelStyle}>
-        <Panel />
-      </View>
-    </View>
+    <Stack.Navigator
+      initialRouteName="Read"
+      screenOptions={{
+        headerTintColor: MD3LightTheme.colors.background,
+        headerBackTitleVisible: false,
+        cardStyle: {
+          backgroundColor: MD3LightTheme.colors.background,
+        },
+      }}
+    >
+      <Stack.Screen name="Read" component={ReadScreen} />
+      <Stack.Screen name="BibleList" component={BibleListScreen} />
+      <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen name="SearchResult" component={SearchResultScreen} />
+    </Stack.Navigator>
   );
 };
 

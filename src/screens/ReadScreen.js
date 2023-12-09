@@ -7,6 +7,7 @@ import { loadBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
 import VerseCard from '../components/VerseCard';
 import BibleHeader from '../components/BibleHeader';
+import Panel from '../components/Panel';
 
 const ReadScreen = ({ navigation, route }) => {
   const flatListRef = useRef();
@@ -63,42 +64,36 @@ const ReadScreen = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1, height: layout.height }}>
-      <FlashList
-        ref={flatListRef}
-        data={verses}
-        renderItem={({ item: { verse, text } }) => (
-          <VerseCard
-            title={verse}
-            content={
-              <Text
-                style={{
-                  paddingHorizontal: 10,
-                  fontFamily: 'NanumGothic-Regular',
-                }}
-              >
-                {text}
-              </Text>
-            }
-          />
-        )}
-        estimatedItemSize={120}
-        ListFooterComponent={
-          <View
-            style={{
-              height: 80,
-            }}
-          />
-        }
-      />
-      <PaginationButton
-        style={{
-          flex: 1,
-        }}
-        prevVisible={chapterIdx > 0}
-        onPrevPress={handlePrevPress}
-        nextVisible={chapterIdx < 1188}
-        onNextPress={handleNextPress}
-      />
+      <View style={{ flex: 85 }}>
+        <FlashList
+          ref={flatListRef}
+          data={verses}
+          renderItem={({ item: { verse, text } }) => (
+            <VerseCard
+              title={verse}
+              content={
+                <Text
+                  style={{
+                    paddingHorizontal: 10,
+                    fontFamily: 'NanumGothic-Regular',
+                  }}
+                >
+                  {text}
+                </Text>
+              }
+            />
+          )}
+          estimatedItemSize={120}
+        />
+      </View>
+      <View style={{ flex: 15 }}>
+        <Panel
+          prevDisabled={chapterIdx == 0}
+          nextDisabled={chapterIdx == 1188}
+          onPrevPress={handlePrevPress}
+          onNextPress={handleNextPress}
+        />
+      </View>
     </View>
   );
 };
