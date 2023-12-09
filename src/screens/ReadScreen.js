@@ -2,13 +2,12 @@ import React, { useEffect, useContext, useRef, useState } from 'react';
 import { FlashList } from '@shopify/flash-list';
 import { View, useWindowDimensions } from 'react-native';
 import PaginationButton from '../components/PaginationButton';
-import { useTheme, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { loadBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
 import VerseCard from '../components/VerseCard';
 
 const ReadScreen = ({ navigation, route }) => {
-  const theme = useTheme();
   const flatListRef = useRef();
   const { chapterIdx, dispatch } = useContext(ReadContext);
 
@@ -62,7 +61,7 @@ const ReadScreen = ({ navigation, route }) => {
       <FlashList
         ref={flatListRef}
         data={verses}
-        renderItem={({ item: { idx, title, chapter, verse, text } }) => (
+        renderItem={({ item: { verse, text } }) => (
           <VerseCard
             title={verse}
             content={

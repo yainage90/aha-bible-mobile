@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { FlashList } from '@shopify/flash-list';
-import { View } from 'react-native';
-import { Text, Card } from 'react-native-paper';
+import { View, useWindowDimensions } from 'react-native';
+import { Text } from 'react-native-paper';
 import { useTheme } from 'react-native-paper';
 import HighlightText from '../components/HighlightText';
 import { ReadContext } from '../contexts';
@@ -17,6 +17,8 @@ const SearchResultScreen = ({ navigation, route }) => {
   const { query } = route.params;
 
   const { dispatch } = useContext(ReadContext);
+
+  const layout = useWindowDimensions();
 
   const apiHost = process.env.EXPO_PUBLIC_API_HOST;
 
@@ -60,7 +62,7 @@ const SearchResultScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ paddingVertical: 20 }}>
+    <View style={{ flex: 1, height: layout.height, paddingVertical: 20 }}>
       <FlashList
         ref={flatListRef}
         data={verses}
@@ -69,7 +71,7 @@ const SearchResultScreen = ({ navigation, route }) => {
         }) => (
           <View>
             <Text style={titleStyle}>
-              • {book} {title} {chapter}장 {verse}절
+              • {book} {title} {chapter}:{verse}
             </Text>
             <VerseCard
               content={<HighlightText>{highlight}</HighlightText>}
@@ -80,7 +82,7 @@ const SearchResultScreen = ({ navigation, route }) => {
             />
           </View>
         )}
-        keyExtractor={item => item.idx}
+        estimatedItemSize={120}
         ListFooterComponent={
           <View
             style={{
@@ -96,8 +98,8 @@ const SearchResultScreen = ({ navigation, route }) => {
 const titleStyle = {
   marginTop: 12,
   marginBottom: 3,
-  fontFamily: 'NanumGothic-Bold',
-  fontSize: 16,
+  fontFamily: 'NanumGothic-Regular',
+  fontSize: 14,
 };
 
 export default SearchResultScreen;

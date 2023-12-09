@@ -1,4 +1,5 @@
-import { FlatList, View, useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import React, { useState, useContext, useEffect } from 'react';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { loadTitleList, loadChapterList } from '../utils/db';
@@ -8,8 +9,6 @@ import { useTheme } from 'react-native-paper';
 import { getTitleAndChapterByChapterIdx } from '../utils/db';
 
 const BibleListScreen = ({ navigation }) => {
-  const layout = useWindowDimensions();
-
   const [titles, setTitles] = useState([]);
   const [chapters, setChapters] = useState([]);
 
@@ -26,6 +25,8 @@ const BibleListScreen = ({ navigation }) => {
     { key: 'title', title: '제목' },
     { key: 'chapter', title: '장' },
   ]);
+
+  const layout = useWindowDimensions();
 
   useEffect(() => {
     loadTitleList().then(titles => {
@@ -48,62 +49,62 @@ const BibleListScreen = ({ navigation }) => {
     console.log(
       `currentTitle=${currentTitle}, currentChapter=${currentChapter}`,
     );
-  }, [currentTitle, currentChapter]);
+  }, [currentTitle]);
 
   const TitleRoute = () => {
     return (
-      <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
-        <List.Section>
-          <FlatList
-            data={titles}
-            renderItem={({ item: { title } }) => (
-              <List.Item
-                title={title}
-                style={{
-                  marginVertical: 10,
-                  backgroundColor:
-                    title === currentTitle ? MD3Colors.primary95 : null,
-                }}
-                right={
-                  title === currentTitle
-                    ? props => (
-                        <List.Icon
-                          {...props}
-                          icon="check"
-                          color={MD3Colors.primary50}
-                        />
-                      )
-                    : null
-                }
-                titleStyle={{
-                  fontSize: 18,
-                  fontFamily: 'NanumGothic-Regular',
-                }}
-                onPress={() => {
-                  loadChapterList(title).then(chapters => {
-                    setCurrentTitle(title);
-                    setChapters(chapters);
-                  });
-                  setCurrentChapter(0);
+      <View style={{ flex: 1, height: layout.height }}>
+        <FlashList
+          data={titles}
+          estimatedItemSize={100}
+          renderItem={({ item: { title } }) => (
+            <List.Item
+              title={title}
+              style={{
+                marginVertical: 10,
+                backgroundColor:
+                  title === currentTitle ? MD3Colors.primary95 : null,
+              }}
+              right={
+                title === currentTitle
+                  ? props => (
+                      <List.Icon
+                        {...props}
+                        icon="check"
+                        color={MD3Colors.primary50}
+                      />
+                    )
+                  : null
+              }
+              titleStyle={{
+                fontSize: 18,
+                fontFamily: 'NanumGothic-Regular',
+              }}
+              onPress={() => {
+                setCurrentChapter(null);
+                loadChapterList(title).then(chapters => {
+                  setCurrentTitle(title);
+                  setChapters(chapters);
                   setIndex(prev => prev + 1);
-                }}
-              />
-            )}
-            keyExtractor={({ idx }) => idx}
-          />
-        </List.Section>
+                });
+              }}
+            />
+          )}
+          keyExtractor={({ idx }) => idx}
+        />
       </View>
     );
   };
 
-  const ChapterRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <List.Section>
-        <FlatList
+  const ChapterRoute = () => {
+    return (
+      <View style={{ flex: 1, height: layout.height }}>
+        <FlashList
           data={chapters}
+          estimatedItemSize={100}
           renderItem={({ item: { chapter, chapterIdx } }) => (
             <List.Item
-              title={chapter}
+              title={`${chapter} 장`}
               style={{
                 marginVertical: 10,
                 backgroundColor:
@@ -121,7 +122,7 @@ const BibleListScreen = ({ navigation }) => {
                   : null
               }
               titleStyle={{
-                fontSize: 20,
+                fontSize: 18,
                 fontFamily: 'NanumGothic-Regular',
               }}
               onPress={() => {
@@ -133,9 +134,9 @@ const BibleListScreen = ({ navigation }) => {
           )}
           keyExtractor={({ chapter }) => chapter}
         />
-      </List.Section>
-    </View>
-  );
+      </View>
+    );
+  };
 
   return (
     <TabView
@@ -162,7 +163,7 @@ const BibleListScreen = ({ navigation }) => {
           }}
         />
       )}
-      initialLayout={{ width: layout.width }}
+      initialLayout={{ width: layout.width, height: layout.height }}
     />
   );
 };
