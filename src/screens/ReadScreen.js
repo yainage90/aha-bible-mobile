@@ -6,6 +6,7 @@ import { Text } from 'react-native-paper';
 import { loadBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
 import VerseCard from '../components/VerseCard';
+import BibleHeader from '../components/BibleHeader';
 
 const ReadScreen = ({ navigation, route }) => {
   const flatListRef = useRef();
@@ -38,7 +39,11 @@ const ReadScreen = ({ navigation, route }) => {
       .catch(err => {
         console.error(err);
       });
-  }, [chapterIdx]);
+
+    navigation.setOptions({
+      header: () => <BibleHeader navigation={navigation} />,
+    });
+  }, [chapterIdx, navigation]);
 
   const handlePrevPress = () => {
     dispatch({

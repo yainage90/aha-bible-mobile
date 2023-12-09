@@ -46,10 +46,15 @@ const BibleListScreen = ({ navigation }) => {
       });
     }
 
-    console.log(
-      `currentTitle=${currentTitle}, currentChapter=${currentChapter}`,
-    );
-  }, [currentTitle]);
+    navigation.setOptions({
+      headerTitle: '목차',
+      headerTitleStyle: {
+        fontSize: 22,
+        fontFamily: 'NanumGothic-ExtraBold',
+      },
+      headerTintColor: MD3Colors.neutral0,
+    });
+  }, [currentTitle, navigation]);
 
   const TitleRoute = () => {
     return (

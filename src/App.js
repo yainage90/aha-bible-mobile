@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { ReadProvider } from './contexts/Read';
 import { SearchProvider } from './contexts/Search';

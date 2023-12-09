@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { FlashList } from '@shopify/flash-list';
 import { View, useWindowDimensions } from 'react-native';
-import { Text } from 'react-native-paper';
-import { useTheme } from 'react-native-paper';
+import { MD3Colors, Text } from 'react-native-paper';
 import HighlightText from '../components/HighlightText';
 import { ReadContext } from '../contexts';
 import VerseCard from '../components/VerseCard';
@@ -11,7 +10,6 @@ const SearchResultScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [verses, setVerses] = useState([]);
-  const theme = useTheme();
   const flatListRef = useRef();
 
   const { query } = route.params;
@@ -30,7 +28,16 @@ const SearchResultScreen = ({ navigation, route }) => {
         animated: false,
       });
     }
-  }, []);
+
+    navigation.setOptions({
+      headerTitle: `'${query}' 검색결과`,
+      headerTitleStyle: {
+        fontSize: 22,
+        fontFamily: 'NanumGothic-aBold',
+      },
+      headerTintColor: MD3Colors.neutral0,
+    });
+  }, [navigation]);
 
   const loadData = () => {
     setLoading(true);

@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Searchbar } from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { MD3Colors, Searchbar } from 'react-native-paper';
 import { View, useColorScheme } from 'react-native';
 import { SearchContext } from '../contexts';
 
@@ -12,6 +12,17 @@ const SearchScreen = ({ navigation }) => {
     dispatch({ query });
     navigation.navigate('SearchResult', { query });
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: '검색',
+      headerTitleStyle: {
+        fontSize: 22,
+        fontFamily: 'NanumGothic-Bold',
+      },
+      headerTintColor: MD3Colors.neutral0,
+    });
+  }, [navigation]);
 
   return (
     <View>
