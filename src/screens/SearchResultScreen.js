@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { FlatList } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { View } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { useTheme } from 'react-native-paper';
@@ -61,7 +61,7 @@ const SearchResultScreen = ({ navigation, route }) => {
 
   return (
     <View style={{ paddingVertical: 20 }}>
-      <FlatList
+      <FlashList
         ref={flatListRef}
         data={verses}
         renderItem={({
