@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Appbar } from 'react-native-paper';
 import { ReadContext } from '../contexts';
-import { getHeaderTitleByChapterIdx } from '../utils/db';
+import { getTitleAndChapterByChapterIdx } from '../utils/db';
 
 const BibleHeader = ({ navigation }) => {
   const { chapterIdx } = useContext(ReadContext);
@@ -9,7 +9,8 @@ const BibleHeader = ({ navigation }) => {
   const [headerTitle, setHeaderTitle] = useState('');
 
   useEffect(() => {
-    getHeaderTitleByChapterIdx(chapterIdx).then(headerTitle => {
+    getTitleAndChapterByChapterIdx(chapterIdx).then(({ title, chapter }) => {
+      const headerTitle = `${title} ${chapter}장`;
       setHeaderTitle(headerTitle);
     });
   }, [chapterIdx]);

@@ -197,7 +197,7 @@ const loadChapterList = title => {
   });
 };
 
-const getHeaderTitleByChapterIdx = chapterIdx => {
+const getTitleAndChapterByChapterIdx = chapterIdx => {
   return new Promise((resolve, reject) => {
     db.transaction(
       tx => {
@@ -207,7 +207,10 @@ const getHeaderTitleByChapterIdx = chapterIdx => {
           (_, result) => {
             const record = result.rows._array[0];
             const headerTitle = `${record.title} ${record.chapter}장`;
-            resolve(headerTitle);
+            resolve({
+              title: record.title,
+              chapter: record.chapter,
+            });
           },
           reject,
         );
@@ -226,5 +229,5 @@ export {
   loadBibleKrvByChapterIdx,
   loadTitleList,
   loadChapterList,
-  getHeaderTitleByChapterIdx,
+  getTitleAndChapterByChapterIdx,
 };

@@ -5,6 +5,7 @@ import { loadTitleList, loadChapterList } from '../utils/db';
 import { List, MD3Colors } from 'react-native-paper';
 import { ReadContext } from '../contexts';
 import { useTheme } from 'react-native-paper';
+import { getTitleAndChapterByChapterIdx } from '../utils/db';
 
 const BibleListScreen = ({ navigation }) => {
   const layout = useWindowDimensions();
@@ -14,9 +15,13 @@ const BibleListScreen = ({ navigation }) => {
 
   const theme = useTheme();
 
-  const { dispatch } = useContext(ReadContext);
+  const { chapterIdx, dispatch } = useContext(ReadContext);
+
+  const [currentTitle, setCurrentTitle] = useState(null);
+  const [currentChapter, setCurrentChapter] = useState(null);
 
   const [index, setIndex] = useState(0);
+
   const [routes] = useState([
     { key: 'title', title: '제목' },
     { key: 'chapter', title: '장' },
@@ -26,7 +31,24 @@ const BibleListScreen = ({ navigation }) => {
     loadTitleList().then(titles => {
       setTitles(titles);
     });
-  }, []);
+
+    if (currentTitle) {
+      loadChapterList(currentTitle).then(chapters => {
+        setChapters(chapters);
+      });
+    }
+
+    if (currentTitle === null && currentChapter === null) {
+      getTitleAndChapterByChapterIdx(chapterIdx).then(({ title, chapter }) => {
+        setCurrentTitle(title);
+        setCurrentChapter(chapter);
+      });
+    }
+
+    console.log(
+      `currentTitle=${currentTitle}, currentChapter=${currentChapter}`,
+    );
+  }, [currentTitle, currentChapter]);
 
   const TitleRoute = () => {
     return (
@@ -37,18 +59,32 @@ const BibleListScreen = ({ navigation }) => {
             renderItem={({ item: { title } }) => (
               <List.Item
                 title={title}
-                hi
                 style={{
                   marginVertical: 10,
+                  backgroundColor:
+                    title === currentTitle ? MD3Colors.primary95 : null,
                 }}
+                right={
+                  title === currentTitle
+                    ? props => (
+                        <List.Icon
+                          {...props}
+                          icon="check"
+                          color={MD3Colors.primary50}
+                        />
+                      )
+                    : null
+                }
                 titleStyle={{
-                  fontSize: 20,
+                  fontSize: 18,
                   fontFamily: 'NanumGothic-Regular',
                 }}
                 onPress={() => {
                   loadChapterList(title).then(chapters => {
+                    setCurrentTitle(title);
                     setChapters(chapters);
                   });
+                  setCurrentChapter(0);
                   setIndex(prev => prev + 1);
                 }}
               />
@@ -70,13 +106,27 @@ const BibleListScreen = ({ navigation }) => {
               title={chapter}
               style={{
                 marginVertical: 10,
+                backgroundColor:
+                  chapter === currentChapter ? MD3Colors.primary95 : null,
               }}
+              right={
+                chapter === currentChapter
+                  ? props => (
+                      <List.Icon
+                        {...props}
+                        icon="check"
+                        colors={MD3Colors.primary50}
+                      />
+                    )
+                  : null
+              }
               titleStyle={{
                 fontSize: 20,
                 fontFamily: 'NanumGothic-Regular',
               }}
               onPress={() => {
                 dispatch({ chapterIdx });
+                setCurrentChapter(chapter);
                 navigation.navigate('Read', { chapterIdx });
               }}
             />
@@ -99,15 +149,16 @@ const BibleListScreen = ({ navigation }) => {
         <TabBar
           {...props}
           indicatorStyle={{
-            backgroundColor: theme.colors.outline,
+            backgroundColor: MD3Colors.neutral70,
           }}
           labelStyle={{
             fontSize: 18,
-            fontFamily: 'NanumGothic-ExtraBold',
+            fontFamily: 'NanumGothic-Bold',
             color: theme.colors.onSurfaceVariant,
+            color: MD3Colors.neutral30,
           }}
           style={{
-            backgroundColor: theme.colors.surfaceVariant,
+            backgroundColor: MD3Colors.primary95,
           }}
         />
       )}
