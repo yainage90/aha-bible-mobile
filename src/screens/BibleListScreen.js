@@ -7,6 +7,7 @@ import { List, MD3Colors } from 'react-native-paper';
 import { ReadContext } from '../contexts';
 import { useTheme } from 'react-native-paper';
 import { getTitleAndChapterByChapterIdx } from '../utils/db';
+import * as Speech from 'expo-speech';
 
 const BibleListScreen = ({ navigation }) => {
   const [titles, setTitles] = useState([]);
@@ -14,10 +15,7 @@ const BibleListScreen = ({ navigation }) => {
 
   const theme = useTheme();
 
-  const {
-    read: { chapterIdx },
-    dispatch,
-  } = useContext(ReadContext);
+  const { read, dispatch } = useContext(ReadContext);
 
   const [currentTitle, setCurrentTitle] = useState(null);
   const [currentChapter, setCurrentChapter] = useState(null);
@@ -43,10 +41,12 @@ const BibleListScreen = ({ navigation }) => {
     }
 
     if (currentTitle === null && currentChapter === null) {
-      getTitleAndChapterByChapterIdx(chapterIdx).then(({ title, chapter }) => {
-        setCurrentTitle(title);
-        setCurrentChapter(chapter);
-      });
+      getTitleAndChapterByChapterIdx(read.chapterIdx).then(
+        ({ title, chapter }) => {
+          setCurrentTitle(title);
+          setCurrentChapter(chapter);
+        },
+      );
     }
 
     navigation.setOptions({
@@ -134,7 +134,13 @@ const BibleListScreen = ({ navigation }) => {
                 fontFamily: 'NanumGothic-Regular',
               }}
               onPress={() => {
-                dispatch({ chapterIdx });
+                Speech.stop().then(() => {
+                  dispatch({
+                    ...read,
+                    chapterIdx,
+                    isTtsPlaying: false,
+                  });
+                });
                 setCurrentChapter(chapter);
                 navigation.navigate('Read', { chapterIdx });
               }}

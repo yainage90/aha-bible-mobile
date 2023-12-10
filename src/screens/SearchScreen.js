@@ -1,14 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { MD3Colors, Searchbar } from 'react-native-paper';
-import { View, useColorScheme } from 'react-native';
-import { SearchContext } from '../contexts';
+import { View } from 'react-native';
+import { ReadContext, SearchContext } from '../contexts';
+import * as Speech from 'expo-speech';
 
 const SearchScreen = ({ navigation }) => {
   const [query, setQuery] = useState('');
 
   const { dispatch } = useContext(SearchContext);
+  const { read, dispatch: readDispatch } = useContext(ReadContext);
 
   const onSearch = () => {
+    Speech.stop().then(() => {
+      readDispatch({
+        ...read,
+        isTtsPlaying: false,
+      });
+    });
     dispatch({ query });
     navigation.navigate('SearchResult', { query });
   };

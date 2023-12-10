@@ -14,7 +14,7 @@ const SearchResultScreen = ({ navigation, route }) => {
 
   const { query } = route.params;
 
-  const { dispatch } = useContext(ReadContext);
+  const { read, dispatch } = useContext(ReadContext);
 
   const layout = useWindowDimensions();
 
@@ -33,7 +33,7 @@ const SearchResultScreen = ({ navigation, route }) => {
       headerTitle: `'${query}' 검색결과`,
       headerTitleStyle: {
         fontSize: 22,
-        fontFamily: 'NanumGothic-aBold',
+        fontFamily: 'NanumGothic-Bold',
       },
       headerTintColor: MD3Colors.neutral0,
     });
@@ -83,7 +83,7 @@ const SearchResultScreen = ({ navigation, route }) => {
             <VerseCard
               content={<HighlightText>{highlight}</HighlightText>}
               onPress={() => {
-                dispatch({ chapterIdx: chapter_idx });
+                dispatch({ ...read, chapterIdx: chapter_idx });
                 navigation.navigate('Read', { verse });
               }}
             />

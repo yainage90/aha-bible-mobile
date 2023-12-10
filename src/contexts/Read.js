@@ -3,9 +3,7 @@ import React, { useState, createContext } from 'react';
 const ReadContext = createContext({
   read: {
     chapterIdx: 0,
-    verseIdx: 0,
     isTtsPlaying: false,
-    mode: 0,
   },
   dispatch: () => {},
 });
@@ -13,16 +11,12 @@ const ReadContext = createContext({
 const ReadProvider = ({ children }) => {
   const [read, setRead] = useState({
     chapterIdx: 0,
-    verseIdx: 0,
     isTtsPlaying: false,
-    mode: 0,
   });
-  const dispatch = ({ chapterIdx, verseIdx, isTtsPlaying, mode }) => {
+  const dispatch = ({ chapterIdx, isTtsPlaying }) => {
     setRead({
       chapterIdx,
-      verseIdx,
       isTtsPlaying,
-      mode,
     });
   };
   const value = { read, dispatch };

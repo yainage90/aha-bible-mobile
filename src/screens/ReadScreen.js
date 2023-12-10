@@ -7,13 +7,11 @@ import { ReadContext } from '../contexts';
 import VerseCard from '../components/VerseCard';
 import BibleHeader from '../components/BibleHeader';
 import Panel from '../components/Panel';
+import * as Speech from 'expo-speech';
 
 const ReadScreen = ({ navigation, route }) => {
   const flatListRef = useRef();
-  const {
-    read: { chapterIdx, verseIdx, isTtsPlaying, mode },
-    dispatch,
-  } = useContext(ReadContext);
+  const { read, dispatch } = useContext(ReadContext);
 
   const [verses, setVerses] = useState([]);
 
@@ -33,11 +31,39 @@ const ReadScreen = ({ navigation, route }) => {
     }
   };
 
+  const speech = (texts, startIdx) => {
+    Speech.speak(
+      texts
+        .slice(startIdx)
+        .map(v => v.text)
+        .join('\n'),
+      {
+        volume: 1.0,
+        pitch: 0.8,
+        voice: 'ko-kr-x-koc-network',
+        onDone: () => {
+          Speech.stop().then(() => {});
+          dispatch({
+            ...read,
+            chapterIdx: read.chapterIdx + 1,
+          });
+        },
+      },
+    );
+  };
+
   useEffect(() => {
-    loadBibleKrvByChapterIdx(chapterIdx)
+    loadBibleKrvByChapterIdx(read.chapterIdx)
       .then(verses => {
         setVerses(verses);
-        scrollToIndex();
+
+        if (!read.isTtsPlaying) {
+          scrollToIndex();
+        }
+
+        if (read.isTtsPlaying) {
+          speech(verses, 0);
+        }
       })
       .catch(err => {
         console.error(err);
@@ -46,22 +72,46 @@ const ReadScreen = ({ navigation, route }) => {
     navigation.setOptions({
       header: () => <BibleHeader navigation={navigation} />,
     });
-  }, [chapterIdx, navigation]);
+  }, [read.chapterIdx, navigation, read.isTtsPlaying]);
 
   const handlePrevPress = () => {
+    Speech.stop().then(() => {});
     dispatch({
-      chapterIdx: chapterIdx - 1,
+      ...read,
+      chapterIdx: read.chapterIdx - 1,
     });
-    navigation.navigate('Read', { chapterIdx: chapterIdx - 1 });
-    console.log(`Go to chapterIdx=${chapterIdx - 1}`);
+    console.log(`Go to chapterIdx=${read.chapterIdx - 1}`);
   };
 
   const handleNextPress = () => {
+    Speech.stop().then(() => {});
     dispatch({
-      chapterIdx: chapterIdx + 1,
+      ...read,
+      chapterIdx: read.chapterIdx + 1,
     });
-    navigation.navigate('Read', { chapterIdx: chapterIdx + 1 });
-    console.log(`Go to chapterIdx=${chapterIdx + 1}`);
+
+    console.log(`Go to chapterIdx=${read.chapterIdx + 1}`);
+  };
+
+  const handlePlayPress = () => {
+    if (read.isTtsPlaying) {
+      Speech.stop().then(() => {});
+    } else {
+      speech(verses, 0);
+    }
+
+    dispatch({
+      ...read,
+      isTtsPlaying: !read.isTtsPlaying,
+    });
+  };
+
+  const handleCardPress = index => {
+    if (read.isTtsPlaying) {
+      Speech.stop().then(() => {
+        speech(verses, index);
+      });
+    }
   };
 
   return (
@@ -70,7 +120,8 @@ const ReadScreen = ({ navigation, route }) => {
         <FlashList
           ref={flatListRef}
           data={verses}
-          renderItem={({ item: { verse, text } }) => (
+          initialScrollIndex={0}
+          renderItem={({ item: { verse, text }, index }) => (
             <VerseCard
               title={verse}
               content={
@@ -83,6 +134,9 @@ const ReadScreen = ({ navigation, route }) => {
                   {text}
                 </Text>
               }
+              onPress={() => {
+                handleCardPress(index);
+              }}
             />
           )}
           estimatedItemSize={120}
@@ -90,10 +144,11 @@ const ReadScreen = ({ navigation, route }) => {
       </View>
       <View style={{ flex: 15 }}>
         <Panel
-          prevDisabled={chapterIdx == 0}
-          nextDisabled={chapterIdx == 1188}
+          prevDisabled={read.chapterIdx == 0}
+          nextDisabled={read.chapterIdx == 1188}
           onPrevPress={handlePrevPress}
           onNextPress={handleNextPress}
+          onPlayPress={handlePlayPress}
         />
       </View>
     </View>
