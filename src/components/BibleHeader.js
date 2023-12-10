@@ -4,7 +4,9 @@ import { ReadContext } from '../contexts';
 import { getTitleAndChapterByChapterIdx } from '../utils/db';
 
 const BibleHeader = ({ navigation }) => {
-  const { chapterIdx } = useContext(ReadContext);
+  const {
+    read: { chapterIdx },
+  } = useContext(ReadContext);
 
   const [headerTitle, setHeaderTitle] = useState('');
 

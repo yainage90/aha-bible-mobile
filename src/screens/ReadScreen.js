@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useRef, useState } from 'react';
 import { FlashList } from '@shopify/flash-list';
 import { View, useWindowDimensions } from 'react-native';
-import PaginationButton from '../components/PaginationButton';
 import { Text } from 'react-native-paper';
 import { loadBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
@@ -11,7 +10,10 @@ import Panel from '../components/Panel';
 
 const ReadScreen = ({ navigation, route }) => {
   const flatListRef = useRef();
-  const { chapterIdx, dispatch } = useContext(ReadContext);
+  const {
+    read: { chapterIdx, verseIdx, isTtsPlaying, mode },
+    dispatch,
+  } = useContext(ReadContext);
 
   const [verses, setVerses] = useState([]);
 

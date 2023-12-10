@@ -14,7 +14,10 @@ const BibleListScreen = ({ navigation }) => {
 
   const theme = useTheme();
 
-  const { chapterIdx, dispatch } = useContext(ReadContext);
+  const {
+    read: { chapterIdx },
+    dispatch,
+  } = useContext(ReadContext);
 
   const [currentTitle, setCurrentTitle] = useState(null);
   const [currentChapter, setCurrentChapter] = useState(null);

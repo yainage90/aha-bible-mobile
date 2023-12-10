@@ -1,6 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { MD3Colors } from 'react-native-paper';
+import * as Speech from 'expo-speech';
 
 const Panel = ({
   prevDisabled = false,
@@ -23,7 +24,24 @@ const Panel = ({
           iconColor={MD3Colors.neutral0}
           size={50}
           onPress={() => {
-            alert('음성 재생 코드 추가');
+            Speech.getAvailableVoicesAsync()
+              .then(res => {
+                const voices = res
+                  .filter(r => r.language === 'ko-KR')
+                  .map(r => r.identifier);
+                console.log(voices);
+              })
+              .catch(err => {
+                console.error(err);
+              });
+            Speech.speak(
+              '태초에 하나님이 천지를 창조하시니라',
+              (options = {
+                volume: 1.0,
+                pitch: 0.8,
+                voice: 'ko-kr-x-koc-network',
+              }),
+            );
           }}
         />
         <IconButton
