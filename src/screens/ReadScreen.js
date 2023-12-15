@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useRef, useState } from 'react';
 import { FlashList } from '@shopify/flash-list';
-import { View, useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions, FlatList } from 'react-native';
 import { Text } from 'react-native-paper';
 import { loadBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
@@ -8,22 +8,45 @@ import VerseCard from '../components/VerseCard';
 import BibleHeader from '../components/BibleHeader';
 import Panel from '../components/Panel';
 import * as Speech from 'expo-speech';
+import { setStatusBarBackgroundColor } from 'expo-status-bar';
 
 const ReadScreen = ({ navigation, route }) => {
   const flatListRef = useRef();
   const { read, dispatch } = useContext(ReadContext);
 
   const [verses, setVerses] = useState([]);
+  const [ttsIdx, setTtsIdx] = useState(0);
 
   const layout = useWindowDimensions();
 
-  const scrollToIndex = () => {
-    if (flatListRef.current && verses.length > 0) {
-      let index = 0;
-      if (route.params && route.params.verse) {
-        index = route.params.verse - 1;
-      }
+  useEffect(() => {
+    navigation.setOptions({
+      header: () => <BibleHeader navigation={navigation} />,
+    });
 
+    loadBibleKrvByChapterIdx(read.chapterIdx)
+      .then(verses => {
+        setVerses(verses);
+        setTtsIdx(0);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }, [read.chapterIdx]);
+
+  useEffect(() => {
+    scrollToIndex(0);
+  }, [verses]);
+
+  useEffect(() => {
+    if (read.isTtsPlaying && verses.length > 0) {
+      scrollToIndex(ttsIdx);
+      playTts(verses[ttsIdx].text);
+    }
+  }, [read.isTtsPlaying, ttsIdx]);
+
+  const scrollToIndex = (index = 0) => {
+    if (flatListRef.current && verses.length > 0) {
       flatListRef.current.scrollToIndex({
         index,
         animated: true,
@@ -31,85 +54,70 @@ const ReadScreen = ({ navigation, route }) => {
     }
   };
 
-  const speech = (texts, startIdx) => {
-    Speech.speak(
-      texts
-        .slice(startIdx)
-        .map(v => v.text)
-        .join('\n'),
-      {
-        volume: 1.0,
-        pitch: 0.8,
-        voice: 'ko-kr-x-koc-network',
-        onDone: () => {
-          Speech.stop().then(() => {});
+  const playTts = text => {
+    Speech.speak(text, {
+      volume: 1.0,
+      pitch: 1.0,
+      voice: 'ko-kr-x-koc-network',
+      onDone: () => {
+        if (ttsIdx === verses.length - 1) {
           dispatch({
             ...read,
             chapterIdx: read.chapterIdx + 1,
           });
-        },
+        } else {
+          setTtsIdx(prev => prev + 1);
+        }
       },
-    );
+    });
   };
 
-  useEffect(() => {
-    loadBibleKrvByChapterIdx(read.chapterIdx)
-      .then(verses => {
-        setVerses(verses);
-
-        if (!read.isTtsPlaying) {
-          scrollToIndex();
-        }
-
-        if (read.isTtsPlaying) {
-          speech(verses, 0);
-        }
-      })
-      .catch(err => {
-        console.error(err);
-      });
-
-    navigation.setOptions({
-      header: () => <BibleHeader navigation={navigation} />,
-    });
-  }, [read.chapterIdx, navigation, read.isTtsPlaying]);
-
   const handlePrevPress = () => {
-    Speech.stop().then(() => {});
-    dispatch({
-      ...read,
-      chapterIdx: read.chapterIdx - 1,
-    });
+    Speech.stop()
+      .then(() => {
+        dispatch({
+          ...read,
+          chapterIdx: read.chapterIdx - 1,
+        });
+      })
+      .catch(err => console.error(err));
+
     console.log(`Go to chapterIdx=${read.chapterIdx - 1}`);
   };
 
   const handleNextPress = () => {
-    Speech.stop().then(() => {});
-    dispatch({
-      ...read,
-      chapterIdx: read.chapterIdx + 1,
-    });
+    Speech.stop()
+      .then(() => {
+        dispatch({
+          ...read,
+          chapterIdx: read.chapterIdx + 1,
+        });
+      })
+      .catch(err => console.error(err));
 
     console.log(`Go to chapterIdx=${read.chapterIdx + 1}`);
   };
 
   const handlePlayPress = () => {
     if (read.isTtsPlaying) {
-      Speech.stop().then(() => {});
+      Speech.stop().then(() => {
+        dispatch({
+          ...read,
+          isTtsPlaying: false,
+        });
+      });
     } else {
-      speech(verses, 0);
+      dispatch({
+        ...read,
+        isTtsPlaying: true,
+      });
     }
-
-    dispatch({
-      ...read,
-      isTtsPlaying: !read.isTtsPlaying,
-    });
   };
 
   const handleCardPress = index => {
-    if (read.isTtsPlaying) {
+    if (read.isTtsPlaying && ttsIdx !== index) {
       Speech.stop().then(() => {
-        speech(verses, index);
+        setTtsIdx(index);
       });
     }
   };
@@ -120,7 +128,7 @@ const ReadScreen = ({ navigation, route }) => {
         <FlashList
           ref={flatListRef}
           data={verses}
-          initialScrollIndex={0}
+          extraData={{ read, ttsIdx }}
           renderItem={({ item: { verse, text }, index }) => (
             <VerseCard
               title={verse}
@@ -137,6 +145,7 @@ const ReadScreen = ({ navigation, route }) => {
               onPress={() => {
                 handleCardPress(index);
               }}
+              isPlaying={read.isTtsPlaying && index === ttsIdx}
             />
           )}
           estimatedItemSize={120}
@@ -153,14 +162,6 @@ const ReadScreen = ({ navigation, route }) => {
       </View>
     </View>
   );
-};
-
-const cardContentrStyle = {
-  marginRight: 10,
-};
-
-const titleStyle = {
-  marginRight: 10,
 };
 
 export default ReadScreen;

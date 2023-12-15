@@ -2,13 +2,15 @@ import { Card, Text } from 'react-native-paper';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-const VerseCard = ({ onPress, title, content }) => {
+const VerseCard = ({ onPress, title, content, isPlaying = false }) => {
   const theme = useTheme();
 
   return (
     <Card
       style={{
-        backgroundColor: theme.colors.onPrimary,
+        backgroundColor: isPlaying
+          ? theme.colors.primaryContainer
+          : theme.colors.onPrimary,
         marginHorizontal: 6,
         marginVertical: 2,
       }}
