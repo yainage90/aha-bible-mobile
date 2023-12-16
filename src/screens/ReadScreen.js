@@ -158,6 +158,7 @@ const ReadScreen = ({ navigation, route }) => {
           onPrevPress={handlePrevPress}
           onNextPress={handleNextPress}
           onPlayPress={handlePlayPress}
+          isTtsPlaying={read.isTtsPlaying}
         />
       </View>
     </View>

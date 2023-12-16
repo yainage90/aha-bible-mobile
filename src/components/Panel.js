@@ -7,6 +7,7 @@ const Panel = ({
   nextDisabled = false,
   onNextPress,
   onPlayPress,
+  isTtsPlaying = false,
 }) => {
   return (
     <View style={panelContainerStyle}>
@@ -19,7 +20,7 @@ const Panel = ({
           disabled={prevDisabled}
         />
         <IconButton
-          icon="play-circle"
+          icon={isTtsPlaying ? 'pause-circle' : 'play-circle'}
           iconColor={MD3Colors.neutral0}
           size={50}
           onPress={onPlayPress}
