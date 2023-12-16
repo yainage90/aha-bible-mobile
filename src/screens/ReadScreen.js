@@ -36,10 +36,6 @@ const ReadScreen = ({ navigation, route }) => {
   useEffect(() => {
     scrollToIndex(0);
 
-    (async () => {
-      await sleep(500);
-    })();
-
     if (read.isTtsPlaying && ttsIdx === 0) {
       playTts(verses[0].text);
     } else {
@@ -57,10 +53,6 @@ const ReadScreen = ({ navigation, route }) => {
       playTts(verses[ttsIdx].text);
     }
   }, [read.isTtsPlaying, ttsIdx]);
-
-  const sleep = ms => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
 
   const scrollToIndex = (index = 0) => {
     if (flatListRef.current && verses.length > 0) {
