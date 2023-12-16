@@ -11,7 +11,7 @@ const HighlightText = ({ children }) => {
         <Text
           key={idx}
           style={{
-            fontFamily: 'NanumGothic-Bold',
+            fontFamily: 'MaruBuri-Bold',
             color: theme.colors.error,
           }}
         >
@@ -23,7 +23,7 @@ const HighlightText = ({ children }) => {
         <Text
           key={idx}
           style={{
-            fontFamily: 'NanumGothic-Regular',
+            fontFamily: 'MaruBuri-Light',
           }}
         >
           {val}

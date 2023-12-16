@@ -33,7 +33,7 @@ const SearchResultScreen = ({ navigation, route }) => {
       headerTitle: `'${query}' 검색결과`,
       headerTitleStyle: {
         fontSize: 22,
-        fontFamily: 'NanumGothic-Bold',
+        fontFamily: 'MaruBuri-SemiBold',
       },
       headerTintColor: MD3Colors.neutral0,
     });
@@ -103,10 +103,11 @@ const SearchResultScreen = ({ navigation, route }) => {
 };
 
 const titleStyle = {
-  marginTop: 12,
+  marginTop: 10,
   marginBottom: 3,
-  fontFamily: 'NanumGothic-Regular',
-  fontSize: 14,
+  marginLeft: 6,
+  fontFamily: 'MaruBuri-Regular',
+  fontSize: 15,
 };
 
 export default SearchResultScreen;

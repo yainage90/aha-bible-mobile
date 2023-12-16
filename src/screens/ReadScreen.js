@@ -141,16 +141,7 @@ const ReadScreen = ({ navigation, route }) => {
           renderItem={({ item: { verse, text }, index }) => (
             <VerseCard
               title={verse}
-              content={
-                <Text
-                  style={{
-                    paddingHorizontal: 10,
-                    fontFamily: 'NanumGothic-Regular',
-                  }}
-                >
-                  {text}
-                </Text>
-              }
+              content={text}
               onPress={() => {
                 handleCardPress(index);
               }}

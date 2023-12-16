@@ -26,7 +26,7 @@ const SearchScreen = ({ navigation }) => {
       headerTitle: '검색',
       headerTitleStyle: {
         fontSize: 22,
-        fontFamily: 'NanumGothic-Bold',
+        fontFamily: 'MaruBuri-SemiBold',
       },
       headerTintColor: MD3Colors.neutral0,
     });
@@ -44,6 +44,10 @@ const SearchScreen = ({ navigation }) => {
         onIconPress={onSearch}
         style={{
           margin: 10,
+          fontFamily: 'MaruBuri-Bold',
+        }}
+        inputStyle={{
+          fontFamily: 'MaruBuri-ExtraLight',
         }}
       />
     </View>

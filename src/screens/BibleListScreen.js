@@ -53,7 +53,7 @@ const BibleListScreen = ({ navigation }) => {
       headerTitle: '목차',
       headerTitleStyle: {
         fontSize: 22,
-        fontFamily: 'NanumGothic-ExtraBold',
+        fontFamily: 'MaruBuri-SemiBold',
       },
       headerTintColor: MD3Colors.neutral0,
     });
@@ -86,7 +86,7 @@ const BibleListScreen = ({ navigation }) => {
               }
               titleStyle={{
                 fontSize: 18,
-                fontFamily: 'NanumGothic-Regular',
+                fontFamily: 'MaruBuri-Regular',
               }}
               onPress={() => {
                 setCurrentChapter(null);
@@ -131,7 +131,7 @@ const BibleListScreen = ({ navigation }) => {
               }
               titleStyle={{
                 fontSize: 18,
-                fontFamily: 'NanumGothic-Regular',
+                fontFamily: 'MaruBuri-Regular',
               }}
               onPress={() => {
                 Speech.stop().then(() => {
@@ -168,7 +168,7 @@ const BibleListScreen = ({ navigation }) => {
           }}
           labelStyle={{
             fontSize: 18,
-            fontFamily: 'NanumGothic-Bold',
+            fontFamily: 'MaruBuri-Bold',
             color: theme.colors.onSurfaceVariant,
             color: MD3Colors.neutral30,
           }}

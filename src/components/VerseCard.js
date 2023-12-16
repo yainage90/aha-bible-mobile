@@ -11,7 +11,7 @@ const VerseCard = ({ onPress, title, content, isPlaying = false }) => {
         backgroundColor: isPlaying
           ? theme.colors.primaryContainer
           : theme.colors.onPrimary,
-        marginHorizontal: 6,
+        marginHorizontal: 4,
         marginVertical: 2,
       }}
       onPress={onPress}
@@ -38,12 +38,12 @@ const VerseCard = ({ onPress, title, content, isPlaying = false }) => {
 
 const titleStyle = {
   marginRight: 4,
+  fontFamily: 'MaruBuri-Bold',
   fontSize: 12,
-  fontFamily: 'NanumGothic-Bold',
 };
 
 const contentTextStyle = {
-  fontFamily: 'NanumGothic-Regular',
+  fontFamily: 'MaruBuri-Light',
   fontSize: 16,
 };
 

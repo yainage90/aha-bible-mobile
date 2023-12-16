@@ -28,7 +28,7 @@ const BibleHeader = ({ navigation }) => {
       <Appbar.Content
         title={headerTitle}
         titleStyle={{
-          fontFamily: 'NanumGothic-Bold',
+          fontFamily: 'MaruBuri-SemiBold',
         }}
       />
       <Appbar.Action

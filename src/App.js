@@ -18,9 +18,11 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    'NanumGothic-Bold': require('../assets/fonts/NanumGothic-Bold.ttf'),
-    'NanumGothic-ExtraBold': require('../assets/fonts/NanumGothic-ExtraBold.ttf'),
-    'NanumGothic-Regular': require('../assets/fonts/NanumGothic-Regular.ttf'),
+    'MaruBuri-SemiBold': require('../assets/fonts/MaruBuri-SemiBold.ttf'),
+    'MaruBuri-Bold': require('../assets/fonts/MaruBuri-Bold.ttf'),
+    'MaruBuri-Regular': require('../assets/fonts/MaruBuri-Regular.ttf'),
+    'MaruBuri-Light': require('../assets/fonts/MaruBuri-Light.ttf'),
+    'MaruBuri-ExtraLight': require('../assets/fonts/MaruBuri-ExtraLight.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
