@@ -27,7 +27,6 @@ const ReadScreen = ({ navigation, route }) => {
     loadBibleKrvByChapterIdx(read.chapterIdx)
       .then(verses => {
         setVerses(verses);
-        setTtsIdx(0);
       })
       .catch(err => {
         console.error(err);
@@ -36,6 +35,11 @@ const ReadScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     scrollToIndex(0);
+    if (read.isTtsPlaying && ttsIdx === 0 && verses.length > 0) {
+      playTts(verses[0].text);
+    } else {
+      setTtsIdx(0);
+    }
   }, [verses]);
 
   useEffect(() => {
