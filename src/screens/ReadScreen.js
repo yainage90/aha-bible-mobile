@@ -42,7 +42,11 @@ const ReadScreen = ({ navigation, route }) => {
     }
 
     return () => {
-      Speech.stop().then(() => {});
+      Speech.isSpeakingAsync().then(res => {
+        if (res) {
+          Speech.stop().then(() => {});
+        }
+      });
     };
   }, [verses]);
 
@@ -66,7 +70,6 @@ const ReadScreen = ({ navigation, route }) => {
     Speech.speak(text, {
       volume: 1.0,
       pitch: 1.0,
-      voice: 'ko-kr-x-koc-network',
       onDone: () => {
         if (ttsIdx === verses.length - 1) {
           dispatch({
@@ -81,27 +84,45 @@ const ReadScreen = ({ navigation, route }) => {
   };
 
   const handlePrevPress = () => {
-    Speech.stop()
-      .then(() => {
+    Speech.isSpeakingAsync().then(res => {
+      if (res) {
+        Speech.stop()
+          .then(() => {
+            dispatch({
+              ...read,
+              chapterIdx: read.chapterIdx - 1,
+            });
+          })
+          .catch(err => console.error(err));
+      } else {
         dispatch({
           ...read,
           chapterIdx: read.chapterIdx - 1,
         });
-      })
-      .catch(err => console.error(err));
+      }
+    });
 
     console.log(`Go to chapterIdx=${read.chapterIdx - 1}`);
   };
 
   const handleNextPress = () => {
-    Speech.stop()
-      .then(() => {
+    Speech.isSpeakingAsync().then(res => {
+      if (res) {
+        Speech.stop()
+          .then(() => {
+            dispatch({
+              ...read,
+              chapterIdx: read.chapterIdx + 1,
+            });
+          })
+          .catch(err => console.error(err));
+      } else {
         dispatch({
           ...read,
           chapterIdx: read.chapterIdx + 1,
         });
-      })
-      .catch(err => console.error(err));
+      }
+    });
 
     console.log(`Go to chapterIdx=${read.chapterIdx + 1}`);
   };
@@ -138,7 +159,7 @@ const ReadScreen = ({ navigation, route }) => {
         backgroundColor: MD3Colors.primary95,
       }}
     >
-      <View style={{ flex: 90 }}>
+      <View style={{ flex: 88 }}>
         <FlashList
           ref={flatListRef}
           data={verses}

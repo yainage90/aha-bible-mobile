@@ -1,5 +1,5 @@
-import { View, StyleSheet } from 'react-native';
-import { MD3Colors, IconButton } from 'react-native-paper';
+import { View, StyleSheet, Platform } from 'react-native';
+import { MD3Colors, IconButton, MD2Colors } from 'react-native-paper';
 import CustomButton from './CustomButton';
 
 const Panel = ({
@@ -15,18 +15,18 @@ const Panel = ({
       <View style={buttonContainer}>
         <CustomButton
           name="play-skip-back-circle"
-          size={44}
+          size={50}
           onPress={onPrevPress}
           disabled={prevDisabled}
         />
         <CustomButton
           name={isTtsPlaying ? 'pause-circle' : 'play-circle'}
-          size={44}
+          size={50}
           onPress={onPlayPress}
         />
         <CustomButton
           name="play-skip-forward-circle"
-          size={44}
+          size={50}
           onPress={onNextPress}
           disabled={nextDisabled}
         />
@@ -41,13 +41,15 @@ const panelContainerStyle = StyleSheet.create({
   flex: 1,
   width: '100%',
   justifyContent: 'center',
-  backgroundColor: MD3Colors.neutral80,
-  borderTopLeftRadius: 12,
-  borderTopRightRadius: 12,
+  backgroundColor: MD3Colors.primary95,
+  borderTopLeftRadius: 15,
+  borderTopRightRadius: 15,
 });
 
 const buttonContainer = StyleSheet.create({
   flex: 1,
   flexDirection: 'row',
   justifyContent: 'space-evenly',
+  borderTopLeftRadius: 15,
+  borderTopRightRadius: 15,
 });

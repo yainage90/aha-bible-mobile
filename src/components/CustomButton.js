@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet } from 'react-native';
-import { TouchableRipple } from 'react-native-paper';
+import { MD3Colors, TouchableRipple } from 'react-native-paper';
 
 const CustomButton = ({
   name,
@@ -11,11 +11,16 @@ const CustomButton = ({
 }) => {
   return (
     <View style={buttonContainerStyle}>
-      {!disabled && (
-        <TouchableRipple onPress={onPress} rippleColor="rgba(0, 0, 0, .32)">
-          <Ionicons name={name} size={size} disabled={disabled} />
-        </TouchableRipple>
-      )}
+      <TouchableRipple onPress={onPress} rippleColor="rgba(0, 0, 0, .32)">
+        <Ionicons
+          name={name}
+          size={size}
+          disabled={disabled}
+          style={{
+            color: disabled ? MD3Colors.neutral80 : MD3Colors.neutral20,
+          }}
+        />
+      </TouchableRipple>
     </View>
   );
 };
