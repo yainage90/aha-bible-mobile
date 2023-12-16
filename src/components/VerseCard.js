@@ -1,4 +1,4 @@
-import { Card, Text } from 'react-native-paper';
+import { Card, MD3Colors, Text } from 'react-native-paper';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
@@ -9,8 +9,8 @@ const VerseCard = ({ onPress, title, content, isPlaying = false }) => {
     <Card
       style={{
         backgroundColor: isPlaying
-          ? theme.colors.primaryContainer
-          : theme.colors.onPrimary,
+          ? MD3Colors.tertiary90
+          : MD3Colors.neutral100,
         marginHorizontal: 4,
         marginVertical: 2,
       }}

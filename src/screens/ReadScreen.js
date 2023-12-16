@@ -1,14 +1,13 @@
 import React, { useEffect, useContext, useRef, useState } from 'react';
 import { FlashList } from '@shopify/flash-list';
-import { View, useWindowDimensions, FlatList } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, useWindowDimensions } from 'react-native';
 import { loadBibleKrvByChapterIdx } from '../utils/db';
 import { ReadContext } from '../contexts';
 import VerseCard from '../components/VerseCard';
 import BibleHeader from '../components/BibleHeader';
 import Panel from '../components/Panel';
 import * as Speech from 'expo-speech';
-import { setStatusBarBackgroundColor } from 'expo-status-bar';
+import { MD3Colors } from 'react-native-paper';
 
 const ReadScreen = ({ navigation, route }) => {
   const flatListRef = useRef();
@@ -132,8 +131,14 @@ const ReadScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ flex: 1, height: layout.height }}>
-      <View style={{ flex: 85 }}>
+    <View
+      style={{
+        flex: 1,
+        height: layout.height,
+        backgroundColor: MD3Colors.primary95,
+      }}
+    >
+      <View style={{ flex: 90 }}>
         <FlashList
           ref={flatListRef}
           data={verses}
@@ -151,7 +156,7 @@ const ReadScreen = ({ navigation, route }) => {
           estimatedItemSize={120}
         />
       </View>
-      <View style={{ flex: 15 }}>
+      <View style={{ flex: 12 }}>
         <Panel
           prevDisabled={read.chapterIdx == 0}
           nextDisabled={read.chapterIdx == 1188}
